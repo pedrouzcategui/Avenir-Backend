@@ -1,0 +1,11 @@
+{
+  "name": "avenir-backend",
+  "version": "1.0.0",
+  "description": "Avenir Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pedro Uzcategui",
+  "license": "MIT"
+}
