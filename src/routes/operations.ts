@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import db from "../db";
+import { OperationController } from "../controllers/OperationController";
 
 const router = express.Router();
 
@@ -10,19 +11,24 @@ router.get("/", async (req: Request, res: Response) => {
 
 router.get("/:id", (req: Request, res: Response) => {
   const { id: operationID } = req.params;
-  res.send(operationID);
+  const isFound = OperationController.find(operationID);
+  res.json(isFound);
 });
 
 router.post("/", (req: Request, res: Response) => {
-  res.send("Operation");
+  const { body } = req;
+  const operation = OperationController.create(body);
+  res.json(operation);
 });
 
-router.put("/", (req: Request, res: Response) => {
-  res.send("Operation");
+router.put("/:id", (req: Request, res: Response) => {
+  const { id: operationID } = req.params;
+  res.json("Operation Updated");
 });
 
-router.delete("/", (req: Request, res: Response) => {
-  res.send("Operation");
+router.delete("/:id", (req: Request, res: Response) => {
+  const { id: operationID } = req.params;
+  res.json("Operation Deleted");
 });
 
 export default router;

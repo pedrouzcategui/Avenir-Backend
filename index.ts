@@ -7,6 +7,10 @@ dotenv.config();
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+app.get("/", function (req: Request, res: Response) {
+  res.json("OK");
+});
+
 app.use("/operations", operationsRouter);
 
 app.listen(port, () => {
