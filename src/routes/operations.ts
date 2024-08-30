@@ -5,8 +5,8 @@ import { OperationController } from "../controllers/OperationController";
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  let result = await db.query("SELECT NOW()");
-  res.json(result);
+  let operations = await OperationController.get();
+  res.json(operations);
 });
 
 router.get("/:id", (req: Request, res: Response) => {
@@ -15,9 +15,9 @@ router.get("/:id", (req: Request, res: Response) => {
   res.json(isFound);
 });
 
-router.post("/", (req: Request, res: Response) => {
-  const { body } = req;
-  const operation = OperationController.create(body);
+router.post("/", async (req: Request, res: Response) => {
+  // const { body } = req;
+  const operation = await OperationController.create();
   res.json(operation);
 });
 
