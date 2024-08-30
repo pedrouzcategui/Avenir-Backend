@@ -13,6 +13,10 @@ export const OperationModel = db.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    description: {
+      type: DataTypes.STRING(256),
+      allowNull: false,
+    },
     transferAccountId: {
       type: DataTypes.UUID,
       allowNull: false,

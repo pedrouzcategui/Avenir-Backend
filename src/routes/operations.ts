@@ -16,13 +16,16 @@ router.get("/:id", (req: Request, res: Response) => {
 });
 
 router.post("/", async (req: Request, res: Response) => {
-  // const { body } = req;
-  const operation = await OperationController.create();
+  const { body } = req;
+  const operation = await OperationController.create(body);
   res.json(operation);
 });
 
 router.put("/:id", (req: Request, res: Response) => {
-  const { id: operationID } = req.params;
+  const {
+    params: { id },
+    body,
+  } = req;
   res.json("Operation Updated");
 });
 
