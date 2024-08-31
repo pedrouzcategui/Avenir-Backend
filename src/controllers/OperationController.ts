@@ -1,36 +1,95 @@
+import { Request, Response } from "express";
 import { OperationModel } from "../models/OperationModel";
-import OperationSchema from "../schemas/OperationSchema";
+import { CreateOperationDTO, UpdateOperationDTO } from "../schemas/Operation";
 
 export class OperationController {
-  public static async get() {
-    const operations = await OperationModel.findAll();
-    return operations;
-  }
-
-  public static async create(body: any) {
+  public static async get(_: Request, res: Response) {
     try {
-      if (!OperationSchema.parse(body)) {
-        throw new Error("Operation Schema is Incorrect");
-      }
-      const operation = await OperationModel.create({
-        id: crypto.randomUUID(),
-        date: new Date(),
-        description: body.description,
-        transferAccountId: crypto.randomUUID(),
-        type: body.type,
-        amount: body.amount,
-      });
-      return operation;
+      const operations = await OperationModel.findAll();
+      res.json(operations);
     } catch (error) {
-      console.log(error);
-      return {
-        error: true,
-        message: error,
-      };
+      // TODO
     }
   }
 
-  public static find(id: string) {
-    return { id };
+  public static async create(req: Request, res: Response) {
+    try {
+      const { body } = req;
+
+      const payload = CreateOperationDTO.parse(body);
+
+      const operation = await OperationModel.create(payload);
+
+      res.json(operation);
+    } catch (error) {
+      res
+        .json({
+          error,
+        })
+        .status(400);
+    }
+  }
+
+  public static async findById(req: Request, res: Response) {
+    try {
+      const { id: operationID } = req.params;
+      const operation = await OperationModel.findByPk(operationID);
+      if (operation === null) throw new Error("Operation not found");
+      res.json(operation);
+    } catch (error) {
+      res
+        .json({
+          error,
+        })
+        .status(400);
+    }
+  }
+
+  public static async update(req: Request, res: Response) {
+    try {
+      const {
+        params: { id: operationID },
+        body,
+      } = req;
+
+      const operation = await OperationModel.findByPk(operationID);
+      if (operation === null) throw new Error("Operation not found");
+
+      const payload = UpdateOperationDTO.parse(body);
+
+      const editedOperation = await operation.update(payload);
+
+      res.json(editedOperation).status(204);
+    } catch (error) {
+      res
+        .json({
+          error,
+        })
+        .status(400);
+    }
+  }
+
+  public static async delete(req: Request, res: Response) {
+    try {
+      const {
+        params: { id: operationID },
+      } = req;
+
+      const operation = await OperationModel.findByPk(operationID);
+      if (operation === null) throw new Error("Operation not found");
+
+      await operation.destroy();
+
+      res.json({
+        ok: true,
+        message: "Operation Destroyed",
+      });
+    } catch (error) {
+      res
+        .json({
+          error,
+        })
+        .status(400);
+    }
   }
 }

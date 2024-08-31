@@ -6,12 +6,14 @@ export const OperationModel = db.define(
   {
     id: {
       type: DataTypes.UUID,
-      allowNull: false,
       primaryKey: true,
+      allowNull: false,
+      defaultValue: crypto.randomUUID(),
     },
     date: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: new Date(),
     },
     description: {
       type: DataTypes.STRING(256),

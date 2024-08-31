@@ -1,37 +1,15 @@
 import express, { Request, Response } from "express";
-import db from "../db";
 import { OperationController } from "../controllers/OperationController";
 
 const router = express.Router();
 
-router.get("/", async (req: Request, res: Response) => {
-  let operations = await OperationController.get();
-  res.json(operations);
-});
+router.get("/", OperationController.get);
+router.get("/:id", OperationController.findById);
 
-router.get("/:id", (req: Request, res: Response) => {
-  const { id: operationID } = req.params;
-  const isFound = OperationController.find(operationID);
-  res.json(isFound);
-});
+router.post("/", OperationController.create);
 
-router.post("/", async (req: Request, res: Response) => {
-  const { body } = req;
-  const operation = await OperationController.create(body);
-  res.json(operation);
-});
+router.put("/:id", OperationController.update);
 
-router.put("/:id", (req: Request, res: Response) => {
-  const {
-    params: { id },
-    body,
-  } = req;
-  res.json("Operation Updated");
-});
-
-router.delete("/:id", (req: Request, res: Response) => {
-  const { id: operationID } = req.params;
-  res.json("Operation Deleted");
-});
+router.delete("/:id", OperationController.delete);
 
 export default router;
